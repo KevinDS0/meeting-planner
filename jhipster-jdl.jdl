@@ -47,9 +47,9 @@ C12("19h-20h")
 relationship OneToMany {
 Salle to EquipementSalle
 Salle to Reunion
+Reunion to EquipementLibre
 }
 
 dto * with mapstruct
 
 
-    

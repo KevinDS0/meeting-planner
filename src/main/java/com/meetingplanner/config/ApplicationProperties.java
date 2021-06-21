@@ -9,4 +9,25 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * See {@link tech.jhipster.config.JHipsterProperties} for a good example.
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
-public class ApplicationProperties {}
+public class ApplicationProperties {
+
+    private Integer pourcentageCapacite;
+
+    private Integer delaiCreneau;
+
+    public Integer getPourcentageCapacite() {
+        return pourcentageCapacite;
+    }
+
+    public void setPourcentageCapacite(Integer pourcentageCapacite) {
+        this.pourcentageCapacite = pourcentageCapacite;
+    }
+
+    public Integer getDelaiCreneau() {
+        return delaiCreneau;
+    }
+
+    public void setDelaiCreneau(Integer delaiCreneau) {
+        this.delaiCreneau = delaiCreneau;
+    }
+}

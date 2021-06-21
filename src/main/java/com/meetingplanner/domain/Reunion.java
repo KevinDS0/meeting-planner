@@ -32,6 +32,8 @@ public class Reunion implements Serializable {
     @JsonIgnoreProperties(value = { "equipementSalles", "reunions" }, allowSetters = true)
     private Salle salle;
 
+
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
