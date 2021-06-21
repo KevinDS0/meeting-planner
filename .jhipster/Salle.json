@@ -1,0 +1,37 @@
+{
+  "name": "Salle",
+  "fields": [
+    {
+      "fieldName": "nom",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "capacite",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "equipementSalle",
+      "otherEntityRelationshipName": "salle",
+      "relationshipName": "equipementSalle"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "reunion",
+      "otherEntityRelationshipName": "salle",
+      "relationshipName": "reunion"
+    }
+  ],
+  "entityTableName": "salle",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210621135443"
+}

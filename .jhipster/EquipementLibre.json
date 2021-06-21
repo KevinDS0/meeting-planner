@@ -1,0 +1,25 @@
+{
+  "name": "EquipementLibre",
+  "fields": [
+    {
+      "fieldName": "type",
+      "fieldType": "TypeEquipement",
+      "fieldValues": "PIEUVRE,ECRAN,WEBCAM,TABLEAU"
+    },
+    {
+      "fieldName": "reserve",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "equipement_libre",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210621135445"
+}

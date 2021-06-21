@@ -1,0 +1,11 @@
+id;type;reserve
+1;PIEUVRE;true
+2;TABLEAU;false
+3;TABLEAU;false
+4;WEBCAM;false
+5;PIEUVRE;false
+6;WEBCAM;false
+7;PIEUVRE;false
+8;PIEUVRE;false
+9;ECRAN;true
+10;WEBCAM;true
