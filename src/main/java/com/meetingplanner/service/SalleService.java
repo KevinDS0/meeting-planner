@@ -1,12 +1,14 @@
 package com.meetingplanner.service;
 
+import com.meetingplanner.config.ApplicationProperties;
+import com.meetingplanner.domain.EquipementSalle;
 import com.meetingplanner.domain.Salle;
+import com.meetingplanner.domain.enumeration.TypeReunion;
 import com.meetingplanner.repository.SalleRepository;
 import com.meetingplanner.service.dto.SalleDTO;
 import com.meetingplanner.service.mapper.SalleMapper;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +28,12 @@ public class SalleService {
 
     private final SalleMapper salleMapper;
 
-    public SalleService(SalleRepository salleRepository, SalleMapper salleMapper) {
+    private final ApplicationProperties applicationProperties;
+
+    public SalleService(SalleRepository salleRepository, SalleMapper salleMapper, ApplicationProperties applicationProperties) {
         this.salleRepository = salleRepository;
         this.salleMapper = salleMapper;
+        this.applicationProperties = applicationProperties;
     }
 
     /**
@@ -97,5 +102,17 @@ public class SalleService {
     public void delete(Long id) {
         log.debug("Request to delete Salle : {}", id);
         salleRepository.deleteById(id);
+    }
+
+    public Set<Salle> getSalleCapaciteAdaptee(Integer nbParticipants) {
+        return salleRepository.findAll().stream()
+            .filter(salle -> Math.ceil(salle.getCapacite() * Math.floorDiv(applicationProperties.getPourcentageCapacite(),100)) >= nbParticipants)
+            .collect(Collectors.toSet());
+    }
+
+    public Boolean verifierEquipementsSalle(Salle salle, TypeReunion typeReunion) {
+        return salle.getEquipementSalles().stream()
+            .map(EquipementSalle::getType)
+            .collect(Collectors.toSet()).containsAll(TypeReunion.getEquipementParTypeReunion(typeReunion));
     }
 }

@@ -26,4 +26,8 @@ public enum Creneau {
     public String getValue() {
         return value;
     }
+
+    public Creneau getPrecedentCreneau(Creneau creneau) {
+        return creneau.ordinal() != 0 ? values()[(creneau.ordinal() - 1) % values().length]: null;
+    }
 }

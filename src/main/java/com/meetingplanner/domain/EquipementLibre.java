@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "equipement_libre")
 public class EquipementLibre implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4115101883332752482L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")

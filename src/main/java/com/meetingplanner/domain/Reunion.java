@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "reunion")
 public class Reunion implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -8883500677335551616L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
