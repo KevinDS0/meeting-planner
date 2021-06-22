@@ -31,7 +31,7 @@ public class Salle implements Serializable {
     private Set<EquipementSalle> equipementSalles = new HashSet<>();
 
     @OneToMany(mappedBy = "salle")
-    @JsonIgnoreProperties(value = { "salle" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "equipementLibres", "salle" }, allowSetters = true)
     private Set<Reunion> reunions = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

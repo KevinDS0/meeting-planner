@@ -15,6 +15,8 @@ public class EquipementLibreDTO implements Serializable {
 
     private Boolean reserve;
 
+    private ReunionDTO reunion;
+
     public Long getId() {
         return id;
     }
@@ -37,6 +39,14 @@ public class EquipementLibreDTO implements Serializable {
 
     public void setReserve(Boolean reserve) {
         this.reserve = reserve;
+    }
+
+    public ReunionDTO getReunion() {
+        return reunion;
+    }
+
+    public void setReunion(ReunionDTO reunion) {
+        this.reunion = reunion;
     }
 
     @Override
@@ -67,6 +77,7 @@ public class EquipementLibreDTO implements Serializable {
             "id=" + getId() +
             ", type='" + getType() + "'" +
             ", reserve='" + getReserve() + "'" +
+            ", reunion=" + getReunion() +
             "}";
     }
 }

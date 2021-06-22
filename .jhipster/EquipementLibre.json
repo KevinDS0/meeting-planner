@@ -11,7 +11,14 @@
       "fieldType": "Boolean"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "reunion",
+      "otherEntityRelationshipName": "equipementLibre",
+      "relationshipName": "reunion"
+    }
+  ],
   "entityTableName": "equipement_libre",
   "dto": "mapstruct",
   "pagination": "no",

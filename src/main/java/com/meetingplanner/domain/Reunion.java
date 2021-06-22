@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.meetingplanner.domain.enumeration.Creneau;
 import com.meetingplanner.domain.enumeration.TypeReunion;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -28,11 +30,13 @@ public class Reunion implements Serializable {
     @Column(name = "creneau")
     private Creneau creneau;
 
+    @OneToMany(mappedBy = "reunion")
+    @JsonIgnoreProperties(value = { "reunion" }, allowSetters = true)
+    private Set<EquipementLibre> equipementLibres = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "equipementSalles", "reunions" }, allowSetters = true)
     private Salle salle;
-
-
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -72,6 +76,37 @@ public class Reunion implements Serializable {
 
     public void setCreneau(Creneau creneau) {
         this.creneau = creneau;
+    }
+
+    public Set<EquipementLibre> getEquipementLibres() {
+        return this.equipementLibres;
+    }
+
+    public Reunion equipementLibres(Set<EquipementLibre> equipementLibres) {
+        this.setEquipementLibres(equipementLibres);
+        return this;
+    }
+
+    public Reunion addEquipementLibre(EquipementLibre equipementLibre) {
+        this.equipementLibres.add(equipementLibre);
+        equipementLibre.setReunion(this);
+        return this;
+    }
+
+    public Reunion removeEquipementLibre(EquipementLibre equipementLibre) {
+        this.equipementLibres.remove(equipementLibre);
+        equipementLibre.setReunion(null);
+        return this;
+    }
+
+    public void setEquipementLibres(Set<EquipementLibre> equipementLibres) {
+        if (this.equipementLibres != null) {
+            this.equipementLibres.forEach(i -> i.setReunion(null));
+        }
+        if (equipementLibres != null) {
+            equipementLibres.forEach(i -> i.setReunion(this));
+        }
+        this.equipementLibres = equipementLibres;
     }
 
     public Salle getSalle() {

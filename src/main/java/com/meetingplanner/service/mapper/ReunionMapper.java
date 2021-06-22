@@ -11,4 +11,9 @@ import org.mapstruct.*;
 public interface ReunionMapper extends EntityMapper<ReunionDTO, Reunion> {
     @Mapping(target = "salle", source = "salle", qualifiedByName = "id")
     ReunionDTO toDto(Reunion s);
+
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    ReunionDTO toDtoId(Reunion reunion);
 }
