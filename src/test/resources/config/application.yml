@@ -109,4 +109,5 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  pourcentage-capacite: 0.7

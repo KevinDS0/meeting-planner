@@ -7,13 +7,16 @@ import com.meetingplanner.domain.enumeration.TypeReunion;
 import com.meetingplanner.repository.SalleRepository;
 import com.meetingplanner.service.dto.SalleDTO;
 import com.meetingplanner.service.mapper.SalleMapper;
-
-import java.util.*;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Salle}.
@@ -104,12 +107,25 @@ public class SalleService {
         salleRepository.deleteById(id);
     }
 
+    /**
+     * Retourne la liste des salles dont la capacité est adaptée au nombre de participants et aux restricition en vigueur
+     *
+     * @param nbParticipants nombre de personnes participants à la réunion
+     * @return la liste des salle dont la capacité est adaptée
+     */
     public Set<Salle> getSalleCapaciteAdaptee(Integer nbParticipants) {
         return salleRepository.findAll().stream()
-            .filter(salle -> Math.ceil(salle.getCapacite() * Math.floorDiv(applicationProperties.getPourcentageCapacite(),100)) >= nbParticipants)
+            .filter(salle -> Math.ceil(salle.getCapacite() * applicationProperties.getPourcentageCapacite()) >= nbParticipants)
             .collect(Collectors.toSet());
     }
 
+    /**
+     * Vérifie si la salle contient les équipements nécessaires à la réunion
+     *
+     * @param salle       la salle de réunion
+     * @param typeReunion le type de réunion
+     * @return vrai si la salle contient tous les équipements, sinon faux
+     */
     public Boolean verifierEquipementsSalle(Salle salle, TypeReunion typeReunion) {
         return salle.getEquipementSalles().stream()
             .map(EquipementSalle::getType)

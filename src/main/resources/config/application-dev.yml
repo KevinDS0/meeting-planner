@@ -107,5 +107,5 @@ jhipster:
 # ===================================================================
 
 application:
-  pourcentage-capacite: 70
+  pourcentage-capacite: 0.7
   delai-creneau: 1

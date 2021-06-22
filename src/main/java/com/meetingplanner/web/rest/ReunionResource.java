@@ -2,13 +2,13 @@ package com.meetingplanner.web.rest;
 
 import com.meetingplanner.repository.ReunionRepository;
 import com.meetingplanner.service.ReunionService;
+import com.meetingplanner.service.dto.ReservationDTO;
 import com.meetingplanner.service.dto.ReunionDTO;
+import com.meetingplanner.service.dto.SalleDTO;
 import com.meetingplanner.web.rest.errors.BadRequestAlertException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * REST controller for managing {@link com.meetingplanner.domain.Reunion}.
@@ -63,7 +70,7 @@ public class ReunionResource {
     /**
      * {@code PUT  /reunions/:id} : Updates an existing reunion.
      *
-     * @param id the id of the reunionDTO to save.
+     * @param id         the id of the reunionDTO to save.
      * @param reunionDTO the reunionDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated reunionDTO,
      * or with status {@code 400 (Bad Request)} if the reunionDTO is not valid,
@@ -97,7 +104,7 @@ public class ReunionResource {
     /**
      * {@code PATCH  /reunions/:id} : Partial updates given fields of an existing reunion, field will ignore if it is null
      *
-     * @param id the id of the reunionDTO to save.
+     * @param id         the id of the reunionDTO to save.
      * @param reunionDTO the reunionDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated reunionDTO,
      * or with status {@code 400 (Bad Request)} if the reunionDTO is not valid,
@@ -168,5 +175,19 @@ public class ReunionResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @ApiOperation(value = "Réserve une salle pour une réunion et renvoie la salle sélectionnée")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Ok, retour de la salle réservée"), @ApiResponse(code = 500, message = "Internal server error"), @ApiResponse(code = 404, message = "Not found")})
+    @PostMapping("/reunion/reserver")
+    public ResponseEntity<SalleDTO> reserverSalleReunion(@RequestBody ReservationDTO reservation) {
+        log.debug("REST request pour la réservation d'une salle pour une réunion : {} {} {}", reservation.getTypeReunion(), reservation.getNbParticipants(), reservation.getCreneau());
+        try {
+            SalleDTO result = reunionService.getSalleAdapteeDisponible(reservation);
+            return ResponseEntity.ok(result);
+        } catch (NoSuchElementException e) {
+            log.debug("Aucune salle disponible pour cette réunion");
+            return ResponseEntity.noContent().build();
+        }
     }
 }

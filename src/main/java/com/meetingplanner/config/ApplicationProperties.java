@@ -11,15 +11,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
-    private Integer pourcentageCapacite;
+    private Double pourcentageCapacite;
 
     private Integer delaiCreneau;
 
-    public Integer getPourcentageCapacite() {
+    public Double getPourcentageCapacite() {
         return pourcentageCapacite;
     }
 
-    public void setPourcentageCapacite(Integer pourcentageCapacite) {
+    public void setPourcentageCapacite(Double pourcentageCapacite) {
         this.pourcentageCapacite = pourcentageCapacite;
     }
 

@@ -30,4 +30,16 @@ public class ReservationDTO implements Serializable {
     public TypeReunion getTypeReunion() {
         return typeReunion;
     }
+
+    public void setNbParticipants(Integer nbParticipants) {
+        this.nbParticipants = nbParticipants;
+    }
+
+    public void setCreneau(Creneau creneau) {
+        this.creneau = creneau;
+    }
+
+    public void setTypeReunion(TypeReunion typeReunion) {
+        this.typeReunion = typeReunion;
+    }
 }

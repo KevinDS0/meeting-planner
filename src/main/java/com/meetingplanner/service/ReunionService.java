@@ -7,16 +7,15 @@ import com.meetingplanner.service.dto.ReservationDTO;
 import com.meetingplanner.service.dto.ReunionDTO;
 import com.meetingplanner.service.dto.SalleDTO;
 import com.meetingplanner.service.mapper.ReunionMapper;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javassist.NotFoundException;
+import com.meetingplanner.service.mapper.SalleMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Reunion}.
@@ -25,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ReunionService {
 
+    public static final String AUCUNE_SALLE_DISPONIBLE = "Aucune salle disponible";
     private final Logger log = LoggerFactory.getLogger(ReunionService.class);
 
     private final ReunionRepository reunionRepository;
@@ -33,10 +33,13 @@ public class ReunionService {
 
     private final SalleService salleService;
 
-    public ReunionService(ReunionRepository reunionRepository, ReunionMapper reunionMapper, SalleService salleService) {
+    private final SalleMapper salleMapper;
+
+    public ReunionService(ReunionRepository reunionRepository, ReunionMapper reunionMapper, SalleService salleService, SalleMapper salleMapper) {
         this.reunionRepository = reunionRepository;
         this.reunionMapper = reunionMapper;
         this.salleService = salleService;
+        this.salleMapper = salleMapper;
     }
 
     /**
@@ -107,7 +110,7 @@ public class ReunionService {
         reunionRepository.deleteById(id);
     }
 
-    public Salle getSalleAdapteeDisponible(ReservationDTO reservation) {
+    public SalleDTO getSalleAdapteeDisponible(ReservationDTO reservation) {
         // TODO : Ajouter le jour de la semaine de la réunion pour pouvoir réserver des salles sur les autres jours de la semaine
         Set<Long> identifiantsSallesNonDisponibles = reunionRepository.findAllReunionsByCreneauIn(Set.of(reservation.getCreneau(), Objects.requireNonNull(reservation.getCreneau().getPrecedentCreneau(reservation.getCreneau()))))
             .stream()
@@ -117,19 +120,17 @@ public class ReunionService {
 
         Set<Salle> sallesCapaciteAdaptee = salleService.getSalleCapaciteAdaptee(reservation.getNbParticipants());
 
-        Set<Salle> sallesAdapteeAvecEquipementNecessaire = sallesCapaciteAdaptee.stream().filter(salle -> { return salleService.verifierEquipementsSalle(salle, reservation.getTypeReunion());
+        Set<Salle> sallesAdapteeAvecEquipementNecessaire = sallesCapaciteAdaptee.stream().filter(salle -> {
+            return salleService.verifierEquipementsSalle(salle, reservation.getTypeReunion());
         }).collect(Collectors.toSet());
 
-        if (CollectionUtils.isEmpty(sallesAdapteeAvecEquipementNecessaire)) {
-            
-        }
 
-        if (CollectionUtils.isNotEmpty(sallesDisponibles)) {
-            return sallesDisponibles.stream()
+        if (CollectionUtils.isNotEmpty(sallesAdapteeAvecEquipementNecessaire)) {
+            return salleMapper.toDto(sallesAdapteeAvecEquipementNecessaire.stream()
                 .filter(salle -> !identifiantsSallesNonDisponibles.contains(salle.getId()))
-                .min(Comparator.comparing(Salle::getCapacite)).orElseThrow(NoSuchElementException::new);
+                .min(Comparator.comparing(Salle::getCapacite)).orElseThrow(() -> new NoSuchElementException(AUCUNE_SALLE_DISPONIBLE)));
         } else {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException(AUCUNE_SALLE_DISPONIBLE);
         }
     }
 }
